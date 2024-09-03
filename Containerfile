@@ -12,7 +12,7 @@ ARG SHA_HEAD_SHORT="${SHA_HEAD_SHORT}"
 ARG VERSION_TAG="${VERSION_TAG}"
 ARG VERSION_PRETTY="${VERSION_PRETTY}"
 
-FROM ghcr.io/ublue-os/fsync-kernel:${FEDORA_MAJOR_VERSION}-${KERNEL_VERSION} AS fsync
+FROM ghcr.io/ublue-os/${KERNEL_FLAVOR}-kernel:${FEDORA_MAJOR_VERSION}-${KERNEL_VERSION} AS fsync
 FROM ghcr.io/ublue-os/akmods:${KERNEL_FLAVOR}-${FEDORA_MAJOR_VERSION}-${KERNEL_VERSION} AS akmods
 FROM ghcr.io/ublue-os/akmods-extra:${KERNEL_FLAVOR}-${FEDORA_MAJOR_VERSION}-${KERNEL_VERSION} AS akmods-extra
 
@@ -526,12 +526,13 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
             fcitx5-chinese-addons \
             fcitx5-hangul \
             ptyxis && \
-        git clone https://github.com/catsout/wallpaper-engine-kde-plugin.git --depth 1 --branch qt6 /tmp/wallpaper-engine-kde-plugin && \
+        git clone https://github.com/catsout/wallpaper-engine-kde-plugin.git --depth 1 --branch main /tmp/wallpaper-engine-kde-plugin && \
         kpackagetool6 --type=Plasma/Wallpaper --global --install /tmp/wallpaper-engine-kde-plugin/plugin && \
         rm -rf /tmp/wallpaper-engine-kde-plugin && \
         sed -i '/<entry name="launchers" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,applications:steam.desktop,applications:net.lutris.Lutris.desktop,applications:org.gnome.Ptyxis.desktop,applications:org.kde.discover.desktop,preferred:\/\/filemanager<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.taskmanager/contents/config/main.xml && \
         sed -i '/<entry name="favorites" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,steam.desktop,net.lutris.Lutris.desktop,systemsettings.desktop,org.kde.dolphin.desktop,org.kde.kate.desktop,org.gnome.Ptyxis.desktop,org.kde.discover.desktop,system-update.desktop<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.kickoff/contents/config/main.xml && \
         sed -i 's@\[Desktop Action new-window\]@\[Desktop Action new-window\]\nX-KDE-Shortcuts=Ctrl+Alt+T@g' /usr/share/applications/org.gnome.Ptyxis.desktop && \
+        sed -i '/^Comment/d' /usr/share/applications/org.gnome.Ptyxis.desktop && \
         sed -i 's@Exec=ptyxis@Exec=kde-ptyxis@g' /usr/share/applications/org.gnome.Ptyxis.desktop && \
         sed -i 's@Keywords=@Keywords=konsole;console;@g' /usr/share/applications/org.gnome.Ptyxis.desktop && \
         cp /usr/share/applications/org.gnome.Ptyxis.desktop /usr/share/kglobalaccel/org.gnome.Ptyxis.desktop && \
@@ -571,15 +572,17 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
             gnome-classic-session-xsession \
             gnome-tour \
             gnome-extensions-app \
+            gnome-terminal \
             gnome-terminal-nautilus \
-            gnome-initial-setup && \
+            gnome-initial-setup \
+            gnome-shell-extension-background-logo \
+            gnome-shell-extension-apps-menu && \
         mkdir -p /tmp/tilingshell && \
         curl -s https://api.github.com/repos/domferr/tilingshell/releases/latest | \
             jq -r '.assets | sort_by(.created_at) | .[] | select (.name|test("^tilingshell@.*zip$")) | .browser_download_url' | \
             wget -qi - -O /tmp/tilingshell/tilingshell@ferrarodomenico.com.zip && \
         unzip /tmp/tilingshell/tilingshell@ferrarodomenico.com.zip -d /usr/share/gnome-shell/extensions/tilingshell@ferrarodomenico.com && \
         rm -rf /tmp/tilingshell && \
-        sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nNoDisplay=true@g' /usr/share/applications/org.gnome.Terminal.desktop && \
         sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nNoDisplay=true@g' /usr/share/applications/org.gnome.SystemMonitor.desktop && \
         systemctl enable dconf-update.service \
     ; fi && \
