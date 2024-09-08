@@ -1,6 +1,7 @@
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-kinoite}"
 ARG BASE_IMAGE_FLAVOR="${BASE_IMAGE_FLAVOR:-main}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR:-main}"
+ARG NVIDIA_FLAVOR=${NVIDIA_FLAVOR:-nvidia}""
 ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-fsync}"
 ARG KERNEL_VERSION="${KERNEL_VERSION:-6.10.4-201.fsync.fc40.x86_64}"
 ARG IMAGE_BRANCH="${IMAGE_BRANCH:-main}"
@@ -21,6 +22,7 @@ FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bazzite
 ARG IMAGE_NAME="${IMAGE_NAME:-bazzite}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR:-ublue-os}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR:-main}"
+ARG NVIDIA_FLAVOR=${NVIDIA_FLAVOR:-nvidia}""
 ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-fsync}"
 ARG KERNEL_VERSION="${KERNEL_VERSION:-6.10.4-201.fsync.fc40.x86_64}"
 ARG IMAGE_BRANCH="${IMAGE_BRANCH:-main}"
@@ -161,6 +163,16 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     --from repo=updates \
         libv4l \
         || true && \
+    if grep -q "kinoite" <<< "${BASE_IMAGE_NAME}"; then \
+        rpm-ostree override replace \
+        --experimental \
+        --from repo=updates \
+            qt6-qtbase \
+            qt6-qtbase-common \
+            qt6-qtbase-mysql \
+            qt6-qtbase-gui \
+            || true \
+    ; fi && \
     rpm-ostree override remove \
         glibc32 \
         || true && \
@@ -717,6 +729,7 @@ FROM bazzite AS bazzite-deck
 ARG IMAGE_NAME="${IMAGE_NAME:-bazzite-deck}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR:-ublue-os}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR:-main}"
+ARG NVIDIA_FLAVOR=${NVIDIA_FLAVOR:-nvidia}""
 ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-fsync}"
 ARG KERNEL_VERSION="${KERNEL_VERSION:-6.10.4-201.fsync.fc40.x86_64}"
 ARG IMAGE_BRANCH="${IMAGE_BRANCH:-main}"
@@ -862,13 +875,14 @@ RUN /usr/libexec/containerbuild/image-info && \
     mkdir -p /var/tmp && chmod 1777 /var/tmp && \
     ostree container commit
 
-FROM ghcr.io/ublue-os/akmods-nvidia:${KERNEL_FLAVOR}-${FEDORA_MAJOR_VERSION}-${KERNEL_VERSION} AS nvidia-akmods
+FROM ghcr.io/ublue-os/akmods-${NVIDIA_FLAVOR}:${KERNEL_FLAVOR}-${FEDORA_MAJOR_VERSION}-${KERNEL_VERSION} AS nvidia-akmods
 
 FROM bazzite AS bazzite-nvidia
 
 ARG IMAGE_NAME="${IMAGE_NAME:-bazzite-nvidia}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR:-ublue-os}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR:-nvidia}"
+ARG NVIDIA_FLAVOR=${NVIDIA_FLAVOR:-nvidia}""
 ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-fsync}"
 ARG KERNEL_VERSION="${KERNEL_VERSION:-6.10.4-201.fsync.fc40.x86_64}"
 ARG IMAGE_BRANCH="${IMAGE_BRANCH:-main}"
@@ -887,7 +901,7 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
         rocm-hip \
         rocm-opencl \
         rocm-clinfo && \
-    if [[ "${BASE_IMAGE_NAME}" == "kinoite" ]]; then \
+    if [[ "${BASE_IMAGE_NAME}" == "kinoite" && "$FEDORA_MAJOR_VERSION" -eq "40" ]]; then \
         rpm-ostree install \
             plasma-workspace-x11 \
     ; fi && \

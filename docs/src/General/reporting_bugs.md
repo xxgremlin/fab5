@@ -12,10 +12,10 @@ https://universal-blue.discourse.group/docs?topic=1470
 
 ## Bazzite Issue Template Walkthrough
 
-![Bug report|690x174](https://universal-blue.discourse.group/uploads/short-url/7Rb5VS0CtHdgMFI0JF72fjnbI2V.png)
+![Bug report|690x174](../img/Bug_report.png)
 
 
-![Template|690x436](https://universal-blue.discourse.group/uploads/short-url/8LtZe7wje4nyTwoE3gzVcFoPveh.png)
+![Template|690x436](../img/Bug_report_template.png)
 
 
 ## Update Bazzite before reporting
@@ -23,7 +23,7 @@ https://universal-blue.discourse.group/docs?topic=1470
 Sometimes bugs are fixed during upgrades, so try updating and rebooting your device before submitting a report to see if the issue still persists between updates.
 
 **Read how to update Bazzite for your device**:
-https://universal-blue.discourse.group/docs?topic=2637
+[Updating guide](../Installing_and_Managing_Software/Updates_Rollbacks_and_Rebasing/updating_guide.md)
 
 ## Make sure to attach system logs
 Open a host terminal and **enter**:

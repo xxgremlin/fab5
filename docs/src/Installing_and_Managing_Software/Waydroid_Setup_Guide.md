@@ -2,12 +2,12 @@
 <!--{"url_discourse": "https://universal-blue.discourse.group/docs?topic=32", "fetched_at": "2024-09-03 16:43:06.740654+00:00"}-->
 <!-- ANCHOR_END: METADATA -->
 
-![Google Play Store|650x500](https://universal-blue.discourse.group/uploads/short-url/LcGSBBFnPOJ4vxQLIXSiTahwd6.jpeg)
+![Google Play Store|650x500](../img/Google_Play_Store.jpeg)
 
 >**Note**: Waydroid does **not** work on Nvidia's proprietary drivers, and requires an AMD or Intel GPU for the best results.
 
 # What is Waydroid?
-![Waydroid](https://universal-blue.discourse.group/uploads/short-url/vz5fotnVMOUinREov1LZ14PcAEw.jpeg)
+![Waydroid](../img/Waydroid.jpeg)
 
 [Waydroid](https://waydro.id/) is an Android container that runs on Linux.  Bazzite users can run Android applications using this method.
 
@@ -71,7 +71,7 @@ Selecting `Configure Waydroid` will allow users to install additional Android tw
 
 ### Get Google Device ID to Get Certified (**GApps**)
 
-![Waydroid_DeviceID|690x182](https://universal-blue.discourse.group/uploads/short-url/rqHjGVEGHaZIeTqM7IuP1WkzF4i.png)
+![Waydroid_DeviceID|690x182](../img/Waydroid_DeviceID.png)
 
 
 1. Launch Waydroid 
@@ -84,7 +84,7 @@ Selecting `Configure Waydroid` will allow users to install additional Android tw
 After verification has happened, it will usually take a while before your device is verified.
 
 # Add as a Non-Steam Shortcut
->This is useful for [Bazzite images that use Steam Gaming Mode.](https://universal-blue.discourse.group/docs?topic=37)
+>This is useful for [Bazzite images that use Steam Gaming Mode.](../Handheld_and_HTPC_edition/Steam_Gaming_Mode.md)
 
 Make sure to add `/usr/bin/waydroid-launcher` to Steam as a non-Steam game for Waydroid to work properly in Steam Gaming Mode.
 
@@ -152,4 +152,4 @@ ujust setup-waydroid
 
 **See also**: [Upstream documentation](https://docs.waydro.id/)
 
-<-- [**View all Bazzite documentation**](https://universal-blue.discourse.group/docs?topic=561)
+<-- [**View all Bazzite documentation**](../index.md)

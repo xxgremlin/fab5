@@ -4,7 +4,7 @@
 
 # Steam Deck LCD (256GB+)
 
-![Steam Deck LCD|690x348, 100%](https://universal-blue.discourse.group/uploads/short-url/yoqR7VWSnItzhg26VOU9nKTrrlN.jpeg)
+![Steam Deck LCD|690x348, 100%](../../img/Steam_Deck_LCD.jpeg)
 
 **Status**: Platinum
 
@@ -19,7 +19,7 @@
 
 # Steam Deck OLED
 
-![Steam Deck OLED|667x500, 100%](https://universal-blue.discourse.group/uploads/short-url/q2OQv8BRI01Q7STGRLlNFj6LSEw.jpeg)
+![Steam Deck OLED|667x500, 100%](../../img/Steam_Deck_OLED.jpeg)
 
 **Status**: Gold
 
@@ -115,6 +115,6 @@ This [post](https://universal-blue.discourse.group/t/my-experience-using-bazzite
 
 <hr>
 
-**See also**: [Steam Gaming Mode Overview](https://universal-blue.discourse.group/docs?topic=37)
+**See also**: [Steam Gaming Mode Overview](../Steam_Gaming_Mode.md)
 
-**<-- Back to [Handheld Wiki](https://universal-blue.discourse.group/docs?topic=1038)**
+**<-- Back to [Handheld Wiki](./index.md)**

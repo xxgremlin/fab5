@@ -23,7 +23,7 @@
     - [Features from Fedora Linux (Kinoite \& Silverblue)](#features-from-fedora-linux-kinoite--silverblue)
 - [Why](#why)
 - [Showcase](#showcase)
-- [Documentation \& Newsletters](#documentation--newsletters)
+- [Documentation](#documentation)
 - [Custom Packages](#custom-packages)
 - [Verification](#verification)
 - [Secure Boot](#secure-boot)
@@ -57,6 +57,7 @@ Bazzite is built from [ublue-os/main](https://github.com/ublue-os/main) and [ubl
 - [ROM Properties Page shell extension](https://github.com/GerbilSoft/rom-properties) included.
 - Full support for [Winesync/Fastsync/NTsync](https://github.com/Frogging-Family/wine-tkg-git/issues/936).
 - [Distrobox](https://github.com/89luca89/distrobox) preinstalled with automatic updates for created containers.
+- Simplified Davinci Resolve installation with [davincibox](https://github.com/zelikos/davincibox) (`ujust install-resolve`)
 - [Ptyxis Terminal](https://gitlab.gnome.org/chergert/ptyxis) used as the default in all images. This terminal is specifically designed for the container workflow you'll use in Bazzite. KDE Konsole and GNOME Console can be installed as flatpaks if required.
 - Automated `duperemove` service for reducing the disk space used by wine prefix contents.
 - Support for HDMI CEC via [libCEC](https://libcec.pulse-eight.com/).
@@ -128,7 +129,7 @@ Variant designed for usage as an alternative to SteamOS on the Steam Deck, and f
 - Default-disabled power-user features, including:
     - Service for low-risk undervolting of the Steam Deck as well as AMD Framework Laptops via [RyzenAdj](https://github.com/FlyGoat/RyzenAdj) and [Ryzen SMU](https://gitlab.com/leogx9r/ryzen_smu), see `ryzenadj.service` and `/etc/default/ryzenadj`.
     - Service for limiting the max charge level of the battery, see `batterylimit.service` and `/etc/default/batterylimit`. <sup><sub>(Works even when the device is off)</sub></sup>
-    - Built in support for display overclocking. For example, add `GAMESCOPE_OVERRIDE_REFRESH_RATE=40,70` to `/etc/environment`.
+    - Built in support for display overclocking. For example, add `CUSTOM_REFRESH_RATES=30-68` to `/etc/environment`. Minimum and maximum refresh rates differ per handheld!
     - 32GB RAM mod your Steam Deck? Enjoy double the maximum VRAM amount, automatically applied. <sup><sub>(Can you share your soldering skills?)</sub></sup>
 - Steam Deck hardware-specific services can be disabled by running `ujust disable-bios-updates` and `ujust disable-firmware-updates` in the terminal. These are automatically disabled on non-Deck hardware, and on Decks with DeckHD displays or 32GB RAM mods.
 - More information can be found [here](https://ublue-os.github.io/bazzite/Handheld_and_HTPC_edition/Steam_Gaming_Mode/) on the Bazzite Steam Deck images.
@@ -233,15 +234,13 @@ Read the [FAQ](https://ublue-os.github.io/bazzite/General/FAQ/) for details on w
 ![GNOME Vapor Theme](/repo_content/gnome1.png?raw=true "GNOME Vapor Theme")
 ![GNOME VGUI2 Theme](/repo_content/gnome2.png?raw=true "GNOME VGUI2 Theme")
 
-## Documentation & Newsletters
+## Documentation
 
 - [Installing and Managing Applications](https://ublue-os.github.io/bazzite/Installing_and_Managing_Software/)
-- [Updates, Rollbacks, and Rebasing](https://ublue-os.github.io/bazzite/Installing_and_Managing_Software/Updates_Rollbacks_%26_Rebasing/)
+- [Updates, Rollbacks, and Rebasing](https://ublue-os.github.io/bazzite/Installing_and_Managing_Software/Updates_Rollbacks_and_Rebasing/)
 - [Gaming Guide](https://ublue-os.github.io/bazzite/Gaming/)
 
 View [additional documentation](http://docs.bazzite.gg/) surrounding the project.
-
-Check out our [newsletters](https://universal-blue.discourse.group/docs?topic=2252) that get published on a regular basis for updates on the project.
 
 ## Custom Packages
 
@@ -367,8 +366,11 @@ We also ship a config for the popular [pull app](https://github.com/apps/pull) i
 
 ## Join The Community
 
-You can find us on the [Universal Blue Discord](https://discord.gg/f8MUghG5PB) and view the [archive](https://www.answeroverflow.com/c/1072614816579063828/1143023993041993769) of support threads without an account.
+- You can find us on the [Universal Blue Discord](https://discord.gg/f8MUghG5PB)
+  - View the [archive](https://www.answeroverflow.com/c/1072614816579063828/1143023993041993769) of support threads without an account.
 
-Discuss and create user guides over at the [Universal Blue Discourse Forums](https://universal-blue.discourse.group/c/bazzite/5).
+- Discuss and create user guides over at the [Universal Blue Discourse Forums](https://universal-blue.discourse.group/c/bazzite/5).
 
-Follow Universal Blue on [Mastodon](https://fosstodon.org/@UniversalBlue).
+- Follow Universal Blue on [Mastodon](https://fosstodon.org/@UniversalBlue).
+
+[**View the full list of Bazzite resources and social presence**](https://universal-blue.discourse.group/docs?topic=8).
