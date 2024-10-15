@@ -248,27 +248,6 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
 # Setup firmware
 # Downgrade firmware to address galileo waking while asleep
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
-    rpm-ostree override replace \
-    --experimental \
-    --from repo=copr:copr.fedorainfracloud.org:kylegospo:bazzite \
-        amd-gpu-firmware \
-        amd-ucode-firmware \
-        atheros-firmware \
-        brcmfmac-firmware \
-        cirrus-audio-firmware \
-        intel-audio-firmware \
-        intel-gpu-firmware \
-        iwlegacy-firmware \
-        iwlwifi-dvm-firmware \
-        iwlwifi-mvm-firmware \
-        libertas-firmware \
-        linux-firmware \
-        linux-firmware-whence \
-        mt7xxx-firmware \
-        nvidia-gpu-firmware \
-        nxpwireless-firmware \
-        realtek-firmware \
-        tiwilink-firmware && \
     mkdir -p /tmp/linux-firmware-neptune && \
     curl -Lo /tmp/linux-firmware-neptune/cs35l41-dsp1-spk-cali.bin https://gitlab.com/evlaV/linux-firmware-neptune/-/raw/"${JUPITER_FIRMWARE_VERSION}"/cs35l41-dsp1-spk-cali.bin && \
     curl -Lo /tmp/linux-firmware-neptune/cs35l41-dsp1-spk-cali.wmfw https://gitlab.com/evlaV/linux-firmware-neptune/-/raw/"${JUPITER_FIRMWARE_VERSION}"/cs35l41-dsp1-spk-cali.wmfw && \
@@ -281,6 +260,8 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     curl https://gitlab.com/evlaV/linux-firmware-neptune/-/archive/"${JUPITER_FIRMWARE_VERSION}"/linux-firmware-neptune-"${JUPITER_FIRMWARE_VERSION}".tar.gz?path=ath11k/QCA206X -o /tmp/linux-firmware-galileo/ath11k.tar.gz && \
     tar --strip-components 1 --no-same-owner --no-same-permissions --no-overwrite-dir -xvf /tmp/linux-firmware-galileo/ath11k.tar.gz -C /tmp/linux-firmware-galileo && \
     xz --check=crc32 /tmp/linux-firmware-galileo/ath11k/QCA206X/hw2.1/* && \
+    rm -f /usr/lib/firmware/ath11k/QCA206X/* && \
+    rm -rf /usr/lib/firmware/ath11k/QCA2066 && \
     mv -vf /tmp/linux-firmware-galileo/ath11k/QCA206X /usr/lib/firmware/ath11k/QCA206X && \
     rm -rf /tmp/linux-firmware-galileo/ath11k && \
     rm -rf /tmp/linux-firmware-galileo/ath11k.tar.gz && \
@@ -938,7 +919,6 @@ RUN /usr/libexec/containerbuild/image-info && \
     systemctl enable cec-onpoweroff.service && \
     systemctl enable cec-onsleep.service && \
     systemctl enable bazzite-tdpfix.service && \
-    systemctl --global enable steam-web-debug-portforward.service && \
     systemctl --global disable sdgyrodsu.service && \
     systemctl disable input-remapper.service && \
     systemctl disable ublue-update.timer && \
