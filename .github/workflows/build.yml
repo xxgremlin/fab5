@@ -70,7 +70,7 @@ jobs:
             is_latest_version: true
             is_stable_version: true
             kernel_flavor: bazzite # must match a kernel_flavor from akmods repo
-            kernel_version: 6.11.5-307.bazzite.fc41.x86_64 # must match a cached version of the above flavor
+            kernel_version: 6.11.6-303.bazzite.fc41.x86_64 # must match a cached version of the above flavor
         exclude:
           - base_name: bazzite
             target_nvidia_flavor: nvidia
@@ -160,7 +160,7 @@ jobs:
         uses: ublue-os/remove-unwanted-software@v7
 
       - name: Pull main, akmods, rechunk images
-        uses: Wandalen/wretry.action@v3.5.0
+        uses: Wandalen/wretry.action@v3.7.2
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -176,7 +176,7 @@ jobs:
 
       - name: Get source versions
         id: labels
-        uses: Wandalen/wretry.action@v3.5.0
+        uses: Wandalen/wretry.action@v3.7.2
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -271,7 +271,7 @@ jobs:
       # Reprocess raw-img using rechunker which will delete it
       - name: Run Rechunker
         id: rechunk
-        uses: hhd-dev/rechunk@v0.8.6
+        uses: hhd-dev/rechunk@v1.0.1
         with:
           rechunk: 'ghcr.io/hhd-dev/rechunk:v0.8.3'
           ref: 'raw-img'
@@ -392,7 +392,7 @@ jobs:
 
       # Push the image to GHCR (Image Registry)
       - name: Push To GHCR
-        uses: Wandalen/wretry.action@v3.5.0
+        uses: Wandalen/wretry.action@v3.7.2
         id: push
         if: github.event_name != 'pull_request'
         env:

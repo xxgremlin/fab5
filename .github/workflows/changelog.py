@@ -42,8 +42,6 @@ CHANGELOG_TITLE = "{tag}: {pretty}"
 CHANGELOG_FORMAT = """\
 {handwritten}
 
-Visit [bazzite.gg](https://bazzite.gg) for more information and to download Bazzite.
-
 From previous `{target}` version `{prev}` there have been the following changes. **One package per new version shown.**
 
 ### Major packages
@@ -59,7 +57,7 @@ From previous `{target}` version `{prev}` there have been the following changes.
 
 {changes}
 
-### How to update
+### How to rebase
 For current users, type the following to rebase to this version:
 ```bash
 # For this branch (if latest):
@@ -399,6 +397,9 @@ def main():
     # Remove refs/tags, refs/heads, refs/remotes e.g.
     # Tags cannot include / anyway.
     target = args.target.split('/')[-1]
+
+    if target == "main":
+        target = "stable"
 
     manifests = get_manifests(target)
     prev, curr = get_tags(target, manifests)

@@ -89,26 +89,6 @@ enable-ryzenadj-max-performance:
     sudo udevadm control --reload-rules
     echo 'installation complete. Reboot to take effect'
 
-# toggles password prompt feedback in terminal, where sudo password prompts will display asterisks when enabled
-toggle-password-feedback ACTION="":
-    #!/usr/bin/bash
-    PWFEEDBACK_FILE="/etc/sudoers.d/enable-pwfeedback"
-    OPTION={{ ACTION }}
-
-    if [ "$OPTION" = "on" ]; then
-      echo 'Defaults pwfeedback' | sudo tee $PWFEEDBACK_FILE
-      echo "enabled, restart terminal to see changes"
-    elif [ "$OPTION" = "off" ]; then
-      sudo rm -f $PWFEEDBACK_FILE
-      echo "disabled pwfeedback. restart your terminal to see changes"
-    elif sudo test -f $PWFEEDBACK_FILE; then
-      sudo rm -f $PWFEEDBACK_FILE
-      echo "disabled pwfeedback. restart your terminal to see changes"
-    else
-      echo 'Defaults pwfeedback' | sudo tee $PWFEEDBACK_FILE
-      echo "enabled, restart terminal to see changes"
-    fi
-
 # disables ryzenadj --max-performance on AC power
 disable-ryzenadj-max-performance:
     #/bin/bash
@@ -121,6 +101,23 @@ restore-input-remapper:
     systemctl enable --now input-remapper.service && \
     cp /usr/share/applications/input-remapper-gtk.desktop ~/.local/share/applications/input-remapper-gtk.desktop && \
     sed -i '/NoDisplay=true/d' ~/.local/share/applications/input-remapper-gtk.desktop
+
+# Install firmware files needed for ayaneo and orangepi speakers
+install-speaker-firmware ACTION="":
+    #!/bin/bash
+    source /usr/lib/ujust/ujust.sh
+    OPTION={{ ACTION }}
+    FIRMWARE_SCRIPT="https://raw.githubusercontent.com/hhd-dev/hwinfo/refs/heads/master/firmware/bazzite-speaker.sh"
+    curl -o "/tmp/bazzite-speaker.sh" "$FIRMWARE_SCRIPT" && cat /tmp/bazzite-speaker.sh | pygmentize -l bash -O style=emacs
+    echo ""
+    echo "Run the above script using elevated permissions?"
+    if [ "$OPTION" == "" ]; then
+      OPTION=$(Choose "Yes" "No")
+    fi
+    if [[ "${OPTION,,}" =~ ^yes || "${OPTION,,}" =~ ^-y ]]; then
+      sudo bash /tmp/bazzite-speaker.sh
+    fi
+    rm /tmp/bazzite-speaker.sh
 
 # Install hhd main branch locally until reboot, helpful for hhd testing and debugging. (rename to install-hhd-dev if we unhide)
 _hhd-dev:

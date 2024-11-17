@@ -176,6 +176,12 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     --from repo=updates \
         libv4l \
         || true && \
+    rpm-ostree override replace \
+    --experimental \
+    --from repo=updates \
+        elfutils-libelf \
+        elfutils-libs \
+        || true && \
     if grep -q "kinoite" <<< "${BASE_IMAGE_NAME}"; then \
         rpm-ostree override replace \
         --experimental \
@@ -194,8 +200,6 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
 
 # Setup Copr repos
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
-    curl -Lo /usr/bin/copr https://raw.githubusercontent.com/ublue-os/COPR-command/main/copr && \
-    chmod +x /usr/bin/copr && \
     curl -Lo /etc/yum.repos.d/_copr_kylegospo-bazzite.repo https://copr.fedorainfracloud.org/coprs/kylegospo/bazzite/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-bazzite-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     curl -Lo /etc/yum.repos.d/_copr_kylegospo-bazzite-multilib.repo https://copr.fedorainfracloud.org/coprs/kylegospo/bazzite-multilib/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-bazzite-multilib-fedora-"${FEDORA_MAJOR_VERSION}".repo?arch=x86_64 && \
     curl -Lo /etc/yum.repos.d/_copr_ublue-os-staging.repo https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo?arch=x86_64 && \
@@ -214,6 +218,7 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     curl -Lo /etc/yum.repos.d/_copr_rok-cdemu.repo https://copr.fedorainfracloud.org/coprs/rok/cdemu/repo/fedora-"${FEDORA_MAJOR_VERSION}"/rok-cdemu-fedora-"${FEDORA_MAJOR_VERSION}".rep && \
     curl -Lo /etc/yum.repos.d/_copr_rodoma92-kde-cdemu-manager.repo https://copr.fedorainfracloud.org/coprs/rodoma92/kde-cdemu-manager/repo/fedora-"${FEDORA_MAJOR_VERSION}"/rodoma92-kde-cdemu-manager-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     curl -Lo /etc/yum.repos.d/_copr_rodoma92-rmlint.repo https://copr.fedorainfracloud.org/coprs/rodoma92/rmlint/repo/fedora-"${FEDORA_MAJOR_VERSION}"/rodoma92-rmlint-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
+    curl -Lo /etc/yum.repos.d/_copr_ilyaz-lact.repo https://copr.fedorainfracloud.org/coprs/ilyaz/LACT/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ilyaz-LACT-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     curl -Lo /etc/yum.repos.d/tailscale.repo https://pkgs.tailscale.com/stable/fedora/tailscale.repo && \
     rpm-ostree install \
         https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
@@ -300,6 +305,7 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
         /tmp/akmods-rpms/kmods/*openrazer*.rpm \
         /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm \
         /tmp/akmods-rpms/kmods/*wl*.rpm \
+        /tmp/akmods-rpms/kmods/*framework-laptop*.rpm \
         /tmp/akmods-extra-rpms/kmods/*gcadapter_oc*.rpm \
         /tmp/akmods-extra-rpms/kmods/*nct6687*.rpm \
         /tmp/akmods-extra-rpms/kmods/*zenergy*.rpm \
@@ -307,7 +313,8 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
         /tmp/akmods-extra-rpms/kmods/*ayaneo-platform*.rpm \
         /tmp/akmods-extra-rpms/kmods/*ayn-platform*.rpm \
         /tmp/akmods-extra-rpms/kmods/*bmi260*.rpm \
-        /tmp/akmods-extra-rpms/kmods/*ryzen-smu*.rpm && \
+        /tmp/akmods-extra-rpms/kmods/*ryzen-smu*.rpm \
+        /tmp/akmods-extra-rpms/kmods/*evdi*.rpm && \
     rpm-ostree override replace \
         --experimental \
         --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
@@ -582,7 +589,6 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
             ibus-mozc \
             openssh-askpass && \
         rpm-ostree override remove \
-            gnome-software-rpm-ostree \
             gnome-classic-session \
             gnome-tour \
             gnome-extensions-app \
@@ -723,6 +729,7 @@ RUN rm -f /etc/profile.d/toolbox.sh && \
     systemctl disable brew-upgrade.timer && \
     systemctl disable brew-update.timer && \
     systemctl enable btrfs-dedup@var-home.timer && \
+    systemctl disable displaylink.service && \
     systemctl enable input-remapper.service && \
     systemctl unmask bazzite-flatpak-manager.service && \
     systemctl enable bazzite-flatpak-manager.service && \
