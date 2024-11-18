@@ -189,9 +189,6 @@ if [[ $IMAGE_NAME =~ "deck" || $IMAGE_NAME =~ "ally" ]]; then
       fi
     fi
 
-    # Ensure SCX service is disabled for now.
-    systemctl disable --now scx.service
-
     systemctl enable --now jupiter-fan-control.service
     systemctl enable --now vpower.service
   else
@@ -264,6 +261,12 @@ fi
 # Let's check the length and reset it to something sensible if that happens.
 if (( $(hostname | wc -m) > 20 )); then
   hostnamectl set-hostname bazzite
+fi
+
+# PPD FIX
+# Correct broken config files on some systems
+if -f "/etc/tuned/ppd.conf" && ! grep "\[battery\]" "/etc/tuned/ppd.conf"; then
+  cp -f "/usr/etc/tuned/ppd.conf" "/etc/tuned/ppd.conf"
 fi
 
 # Set default target to graphical, fixes rebase from base image
