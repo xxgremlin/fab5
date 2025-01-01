@@ -190,6 +190,11 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
         glibc-all-langpacks \
         glibc-gconv-extra \
         || true && \
+    rpm-ostree override replace \
+    --experimental \
+    --from repo=updates \
+        libxcrypt \
+        || true && \
     if grep -q "kinoite" <<< "${BASE_IMAGE_NAME}"; then \
         rpm-ostree override replace \
         --experimental \
@@ -415,7 +420,7 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     rpm-ostree install \
         discover-overlay \
-        sunshine-fix \
+        sunshine \
         python3-pip \
         libadwaita \
         duperemove \
@@ -436,6 +441,7 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
         tailscale \
         webapp-manager \
         btop \
+        duf \
         fish \
         lshw \
         xdotool \
