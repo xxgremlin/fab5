@@ -222,6 +222,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         xrandr \
         compsize \
         ryzenadj \
+        ddcutil \
         input-remapper \
         i2c-tools \
         udica \
@@ -275,7 +276,8 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y --setopt=install_weak_deps=False install \
         rocm-hip \
         rocm-opencl \
-        rocm-clinfo && \
+        rocm-clinfo \
+        rocm-smi && \
     mkdir -p /etc/xdg/autostart && \
     sed -i~ -E 's/=.\$\(command -v (nft|ip6?tables-legacy).*/=/g' /usr/lib/waydroid/data/scripts/waydroid-net.sh && \
     sed -i '1s/^/[include]\npaths = ["\/etc\/ublue-os\/topgrade.toml"]\n\n/' /usr/share/ublue-update/topgrade-user.toml && \
@@ -414,8 +416,11 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         curl -s https://api.github.com/repos/domferr/tilingshell/releases/latest | \
             jq -r '.assets | sort_by(.created_at) | .[] | select (.name|test("^tilingshell@.*zip$")) | .browser_download_url' | \
             wget -qi - -O /tmp/tilingshell/tilingshell@ferrarodomenico.com.zip && \
-        curl -Lo /usr/share/thumbnailers/exe-thumbnailer.thumbnailer https://raw.githubusercontent.com/jlu5/icoextract/master/exe-thumbnailer.thumbnailer && \
         unzip /tmp/tilingshell/tilingshell@ferrarodomenico.com.zip -d /usr/share/gnome-shell/extensions/tilingshell@ferrarodomenico.com && \
+        mkdir -p /tmp/gnome-hdr && \
+        curl -Lo /tmp/gnome-hdr/hdr-enableelrant.team.v2.shell-extension.zip https://extensions.gnome.org/extension-data/hdr-enableelrant.team.v2.shell-extension.zip && \
+        unzip /tmp/gnome-hdr/hdr-enableelrant.team.v2.shell-extension.zip -d /usr/share/gnome-shell/extensions/hdr-enable@elrant.team && \
+        curl -Lo /usr/share/thumbnailers/exe-thumbnailer.thumbnailer https://raw.githubusercontent.com/jlu5/icoextract/master/exe-thumbnailer.thumbnailer && \
         systemctl enable dconf-update.service \
     ; fi && \
     /ctx/cleanup
@@ -778,7 +783,8 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y remove \
         rocm-hip \
         rocm-opencl \
-        rocm-clinfo && \
+        rocm-clinfo \
+        rocm-smi && \
     /ctx/cleanup
 
 # Install NVIDIA driver
